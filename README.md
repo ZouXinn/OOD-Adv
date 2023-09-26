@@ -27,7 +27,7 @@ python -m domainbed.scripts.sweep launch --data_dir=./domainbed/data \
             --output_dir=./sweep/output/path \
             --command_launcher multi_gpu \
             --algorithms ERM MLDG CDANN VREx RSC \
-            --datasets RotatedMNIST ColoredMNIST VLCS \
+            --datasets RotatedMNIST ColoredMNIST VLCS PACS OfficeHome \
             --n_hparams 20 --n_trials 1 --single_test_envs
 ```
 
@@ -37,7 +37,7 @@ python -m domainbed.scripts.sweep launch --data_dir=./domainbed/data \
             --output_dir=./sweep/output/path \
             --command_launcher multi_gpu \
             --algorithms MAT LDAT \
-            --datasets ColoredMNIST VLCS \
+            --datasets ColoredMNIST VLCS PACS OfficeHome \
             --n_hparams 20 --n_trials 1 --single_test_envs \
             --steps 8000
 ```
@@ -48,7 +48,7 @@ python -m domainbed.scripts.sweep launch --data_dir=./domainbed/data \
             --output_dir=./sweep/output/path \
             --command_launcher multi_gpu \
             --algorithms AERM RDANN \
-            --datasets RotatedMNIST ColoredMNIST VLCS \
+            --datasets RotatedMNIST ColoredMNIST VLCS PACS OfficeHome \
             --n_hparams 20 --n_trials 1 --single_test_envs \
             --steps 8000
 ```
@@ -63,12 +63,18 @@ python -m domainbed.scripts.find_best_hparam --input_dir=./sweep/output/path \
 
 python -m domainbed.scripts.find_best_hparam --input_dir=./sweep/output/path \
             --dataset=VLCS
+            
+python -m domainbed.scripts.find_best_hparam --input_dir=./sweep/output/path \
+            --dataset=PACS
+            
+python -m domainbed.scripts.find_best_hparam --input_dir=./sweep/output/path \
+            --dataset=OfficeHome
 ```
 
 ## 4 Retrain the models with the best parameters
 ```sh
 python -m domainbed.scripts.resweep launch --command_launcher multi_gpu \
-            --datasets RotatedMNIST ColoredMNIST VLCS \
+            --datasets RotatedMNIST ColoredMNIST VLCS PACS OfficeHome \
             --algorithms ERM MLDG CDANN VREx RSC MAT LDAT AERM RDANN \
             --sweep_base_dir ./sweep/output \
             --selection_methods IIDAccuracySelectionMethod
@@ -77,7 +83,7 @@ python -m domainbed.scripts.resweep launch --command_launcher multi_gpu \
 ## 5 Attack the trained models
 ```sh
 python -m domainbed.scripts.sweep_attack launch --command_launcher multi_gpu \
-            --datasets RotatedMNIST ColoredMNIST VLCS \
+            --datasets RotatedMNIST ColoredMNIST VLCS PACS OfficeHome \
             --sweep_base_dir ./sweep/output \
             --selection_methods IIDAccuracySelectionMethod \
             --train_methods ST \
@@ -85,7 +91,7 @@ python -m domainbed.scripts.sweep_attack launch --command_launcher multi_gpu \
             --algorithms ERM MLDG CDANN VREx RSC MAT LDAT AERM RDANN
 
 python -m domainbed.scripts.sweep_attack launch --command_launcher multi_gpu \
-            --datasets RotatedMNIST VLCS \
+            --datasets RotatedMNIST VLCS PACS OfficeHome \
             --sweep_base_dir ./sweep/output \
             --selection_methods IIDAccuracySelectionMethod \
             --train_methods ST \
@@ -97,7 +103,7 @@ python -m domainbed.scripts.sweep_attack launch --command_launcher multi_gpu \
 Run the following command to collect the results for FGSM and PGD
 ```sh
 python -m domainbed.scripts.collect_attack_results --input_dir ./sweep/output \
-            --datasets RotatedMNIST ColoredMNIST VLCS \
+            --datasets RotatedMNIST ColoredMNIST VLCS PACS OfficeHome \
             --selection_methods IIDAccuracySelectionMethod \
             --train_method ST \
             --attacks FGSM PGD \
@@ -110,7 +116,7 @@ python -m domainbed.scripts.collect_attack_results --input_dir ./sweep/output \
 Run the following command to collect the results for AutoAttack
 ```sh
 python -m domainbed.scripts.collect_attack_results --input_dir ./sweep/output \
-            --datasets RotatedMNIST VLCS \
+            --datasets RotatedMNIST VLCS PACS OfficeHome \
             --selection_methods IIDAccuracySelectionMethod \
             --train_method ST \
             --attacks AutoAttack \
